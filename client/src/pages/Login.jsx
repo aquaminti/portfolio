@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
+import api from '../services/api'
 import { useToast } from '../hooks/useToast'
 import ToastContainer from '../components/Toast'
 import './Auth.css'
@@ -27,7 +27,7 @@ export default function Login() {
     setErrors({})
     setLoading(true)
     try {
-      const res = await axios.post('/api/auth/login', form)
+      const res = await api.post('/auth/login', form)
       localStorage.setItem('token', res.data.token)
       success('Добро пожаловать!')
       setTimeout(() => navigate('/admin'), 800)

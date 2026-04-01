@@ -14,7 +14,12 @@ const messagesRoutes = require('./routes/messages')
 const app  = express()
 const PORT = process.env.PORT || 5000
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+const corsOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
+app.use(cors({ origin: corsOrigins, credentials: true }))
 app.use(express.json())
 
 app.use('/api/auth',     authRoutes)

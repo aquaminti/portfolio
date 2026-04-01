@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../services/api'
 import { useToast } from '../hooks/useToast'
 import ToastContainer from '../components/Toast'
 import './Auth.css'
@@ -33,7 +33,7 @@ export default function Register() {
     setErrors({})
     setLoading(true)
     try {
-      await axios.post('/api/auth/register', {
+      await api.post('/auth/register', {
         username: form.username,
         email:    form.email,
         password: form.password,
