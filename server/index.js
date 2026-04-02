@@ -14,12 +14,20 @@ const messagesRoutes = require('./routes/messages')
 const app  = express()
 const PORT = process.env.PORT || 5000
 
-const corsOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean)
+const clientOriginRaw = process.env.CLIENT_ORIGIN
+const corsOrigins = clientOriginRaw
+  ? clientOriginRaw.split(',').map((s) => s.trim()).filter(Boolean)
+  : null
 
-app.use(cors({ origin: corsOrigins, credentials: true }))
+// If CLIENT_ORIGIN is not set, reflect incoming Origin header instead of blocking.
+// This prevents CORS issues when deploying frontend to platforms like Vercel.
+app.use(
+  cors(
+    corsOrigins
+      ? { origin: corsOrigins, credentials: true }
+      : { origin: true, credentials: true },
+  ),
+)
 app.use(express.json())
 
 app.use('/api/auth',     authRoutes)
